@@ -2,201 +2,156 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For Tanisha 💖</title>
+<title>For Tanisha ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 *{
-  margin:0;
-  padding:0;
   box-sizing:border-box;
   font-family:'Poppins',sans-serif;
 }
 
 body{
+  margin:0;
   height:100vh;
-  background:linear-gradient(135deg,#ff5f7e,#ff9a9e);
-  overflow:hidden;
+  background:linear-gradient(135deg,#ff6a88,#ff99ac);
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
+  overflow:hidden;
   color:white;
 }
 
-/* Floating Hearts */
-.hearts span{
-  position:absolute;
-  bottom:-20px;
-  font-size:18px;
-  animation:float 6s linear infinite;
-}
-
-@keyframes float{
-  from{transform:translateY(0) scale(1);opacity:1;}
-  to{transform:translateY(-120vh) scale(1.6);opacity:0;}
-}
-
-/* Screens */
-.screen{
-  display:none;
+.card{
   width:90%;
   max-width:360px;
-  padding:30px;
+  background:rgba(255,255,255,0.18);
+  backdrop-filter:blur(12px);
   border-radius:22px;
+  padding:28px;
   text-align:center;
-  backdrop-filter:blur(18px);
-  background:rgba(255,255,255,0.22);
-  box-shadow:0 25px 60px rgba(0,0,0,0.25);
-  animation:fade 0.5s ease;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  animation:fadeIn 1s ease;
 }
 
-.screen.active{display:block;}
-
-@keyframes fade{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
+h1{
+  margin-bottom:10px;
 }
 
-h1{margin-bottom:10px;}
-p{margin-bottom:20px;font-size:16px;}
+p{
+  font-size:15px;
+  opacity:0.9;
+}
 
 button{
-  padding:12px 22px;
   border:none;
-  border-radius:25px;
+  padding:12px 20px;
+  border-radius:30px;
   background:white;
-  color:#ff4b73;
-  font-size:16px;
-  margin:8px;
+  color:#ff4f7a;
+  font-size:15px;
+  margin:10px;
   cursor:pointer;
-  transition:0.25s;
+  transition:0.3s;
 }
 
 button:hover{
   transform:scale(1.08);
 }
 
-input[type=range]{
-  width:100%;
-  margin:15px 0;
+.hidden{
+  display:none;
 }
 
-/* Confetti */
-canvas{
-  position:fixed;
-  top:0;
-  left:0;
-  pointer-events:none;
+.comment{
+  margin-top:15px;
+  font-style:italic;
+  animation:fadeIn 0.8s ease;
+}
+
+.slider{
+  width:100%;
+  margin-top:20px;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes fadeOut{
+  from{opacity:1;}
+  to{opacity:0;}
 }
 </style>
 </head>
 
 <body>
 
-<div class="hearts"></div>
-
-<!-- Screen 1 -->
-<div class="screen active" id="s1">
-  <h1>Hi Tanisha 💕</h1>
+<div class="card" id="screen1">
+  <h1>Hi Tanisha 💖</h1>
   <p>How are you feeling right now?</p>
-  <button onclick="start(); next(2)">Happy 😊</button>
-  <button onclick="start(); next(2)">In Love 😍</button>
+  <button onclick="feeling('happy')">Happy 😊</button>
+  <button onclick="feeling('love')">In Love 💕</button>
+  <div class="comment" id="comment1"></div>
 </div>
 
-<!-- Screen 2 -->
-<div class="screen" id="s2">
-  <h1>Be Honest 🥺</h1>
+<div class="card hidden" id="screen2">
+  <h1>Tell me something 🥺</h1>
   <p>How much do you miss me?</p>
-  <input type="range" min="1" max="10" value="5"
-         oninput="level.innerText=this.value">
-  <p>Level: <span id="level">5</span></p>
-  <button onclick="next(3)">Next ❤️</button>
+  <input type="range" min="1" max="4" value="1" class="slider" id="missSlider" oninput="updateMiss()">
+  <p id="missValue">1</p>
+  <button onclick="checkMiss()">Confirm ❤️</button>
+  <div class="comment" id="comment2"></div>
 </div>
 
-<!-- Screen 3 -->
-<div class="screen" id="s3">
-  <h1>Just Curious 🌹</h1>
-  <p>Which flower would you take from me?</p>
-  <button onclick="next(4)">Red Rose 🌹</button>
-  <button onclick="next(4)">Pink Rose 🌸</button>
-</div>
-
-<!-- Screen 4 -->
-<div class="screen" id="s4">
-  <h1>I Love You 💞</h1>
+<div class="card hidden" id="screen3">
+  <h1>I love you so much 💞</h1>
   <p>Will you be my Valentine?</p>
-  <button onclick="celebrate()">YES 💖</button>
-  <button onmouseover="runAway(this)">NO 😜</button>
+  <button onclick="nope()">NO 🙈</button>
+  <button onclick="yes()">YES 💖</button>
+  <div class="comment" id="comment3"></div>
 </div>
-
-<canvas id="confetti"></canvas>
-
-<audio id="bgm" loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">
-</audio>
 
 <script>
-function next(n){
-  document.querySelector('.screen.active').classList.remove('active');
-  document.getElementById('s'+n).classList.add('active');
+function transition(from,to){
+  document.getElementById(from).classList.add('hidden');
+  document.getElementById(to).classList.remove('hidden');
 }
 
-/* Hearts */
-const hearts=document.querySelector('.hearts');
-setInterval(()=>{
-  const h=document.createElement('span');
-  h.innerText='💖';
-  h.style.left=Math.random()*100+'vw';
-  h.style.animationDuration=3+Math.random()*4+'s';
-  hearts.appendChild(h);
-  setTimeout(()=>h.remove(),6000);
-},350);
-
-/* Music */
-function start(){
-  document.getElementById('bgm').play();
-}
-
-/* No Button */
-function runAway(btn){
-  btn.style.position='absolute';
-  btn.style.left=Math.random()*70+'%';
-  btn.style.top=Math.random()*70+'%';
-}
-
-/* Celebration */
-function celebrate(){
-  startConfetti();
-  document.getElementById('s4').innerHTML=
-  "<h1>Forever Us 💍</h1><p>You’re my favorite person, my safe place, my love ❤️</p>";
-}
-
-/* Confetti */
-function startConfetti(){
-  const c=document.getElementById('confetti');
-  const x=c.getContext('2d');
-  c.width=innerWidth;
-  c.height=innerHeight;
-  const p=Array.from({length:180},()=>({
-    x:Math.random()*c.width,
-    y:Math.random()*c.height,
-    r:Math.random()*6+4,
-    d:Math.random()*2+1,
-    c:`hsl(${Math.random()*360},100%,70%)`
-  }));
-  function draw(){
-    x.clearRect(0,0,c.width,c.height);
-    p.forEach(o=>{
-      x.beginPath();
-      x.fillStyle=o.c;
-      x.arc(o.x,o.y,o.r,0,Math.PI*2);
-      x.fill();
-      o.y+=o.d;
-      if(o.y>c.height)o.y=0;
-    });
-    requestAnimationFrame(draw);
+function feeling(type){
+  let msg = document.getElementById("comment1");
+  if(type==="happy"){
+    msg.innerText="Your happiness makes my heart smile ❤️";
+  }else{
+    msg.innerText="Being in love looks beautiful on you 💕";
   }
-  draw();
+  setTimeout(()=>transition("screen1","screen2"),1500);
+}
+
+function updateMiss(){
+  const values=["1","10","100","∞"];
+  let slider=document.getElementById("missSlider").value;
+  document.getElementById("missValue").innerText=values[slider-1];
+}
+
+function checkMiss(){
+  let slider=document.getElementById("missSlider").value;
+  let msg=document.getElementById("comment2");
+  if(slider<4){
+    msg.innerText="I’m sad 😔 Try again… I know it’s more ❤️";
+  }else{
+    msg.innerText="That’s infinity 😍 Just like my love!";
+    setTimeout(()=>transition("screen2","screen3"),1500);
+  }
+}
+
+function nope(){
+  document.getElementById("comment3").innerText="This option is not allowed 😌💕";
+}
+
+function yes(){
+  document.getElementById("comment3").innerText="Utsav loves Tanisha too ❤️ Love you forever 💞";
 }
 </script>
 
