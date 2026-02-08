@@ -7,152 +7,239 @@
 
 <style>
 *{
+  margin:0;
+  padding:0;
   box-sizing:border-box;
   font-family:'Poppins',sans-serif;
 }
 
 body{
-  margin:0;
   height:100vh;
-  background:linear-gradient(135deg,#ff6a88,#ff99ac);
+  background:linear-gradient(135deg,#ff5f7e,#ff9a9e);
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   overflow:hidden;
   color:white;
 }
 
+/* Card */
 .card{
   width:90%;
   max-width:360px;
-  background:rgba(255,255,255,0.18);
-  backdrop-filter:blur(12px);
-  border-radius:22px;
-  padding:28px;
+  background:rgba(255,255,255,0.22);
+  backdrop-filter:blur(15px);
+  border-radius:26px;
+  padding:30px;
   text-align:center;
-  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  box-shadow:0 30px 60px rgba(0,0,0,0.25);
   animation:fadeIn 1s ease;
 }
 
-h1{
-  margin-bottom:10px;
-}
+.hidden{display:none;}
 
-p{
-  font-size:15px;
-  opacity:0.9;
-}
+h1{margin-bottom:10px;}
+p{font-size:15px;margin-bottom:15px;opacity:0.95;}
 
+/* Buttons */
 button{
-  border:none;
-  padding:12px 20px;
-  border-radius:30px;
   background:white;
   color:#ff4f7a;
+  border:none;
+  padding:12px 22px;
+  border-radius:30px;
   font-size:15px;
-  margin:10px;
+  margin:8px;
   cursor:pointer;
   transition:0.3s;
 }
 
-button:hover{
-  transform:scale(1.08);
-}
+button:hover{transform:scale(1.1);}
 
-.hidden{
-  display:none;
-}
+/* Slider */
+input[type=range]{width:100%;margin:15px 0;}
 
+/* Comments */
 .comment{
-  margin-top:15px;
+  margin-top:14px;
   font-style:italic;
   animation:fadeIn 0.8s ease;
 }
 
-.slider{
-  width:100%;
-  margin-top:20px;
+/* Teddy */
+.teddy{
+  font-size:44px;
+  margin-bottom:12px;
+  animation:pulse 1.5s infinite;
 }
 
+/* Heartbeat */
+.heartbeat{
+  animation:heartbeat 1.2s infinite;
+}
+
+/* Rose petals */
+.rose{
+  position:absolute;
+  top:-20px;
+  font-size:20px;
+  animation:fall 6s linear infinite;
+  opacity:0.9;
+}
+
+/* Cinematic final */
+.final{
+  animation:cinematic 3s ease forwards;
+}
+
+/* Animations */
 @keyframes fadeIn{
-  from{opacity:0;transform:translateY(20px);}
+  from{opacity:0;transform:translateY(25px);}
   to{opacity:1;transform:translateY(0);}
 }
 
-@keyframes fadeOut{
-  from{opacity:1;}
-  to{opacity:0;}
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.12);}
+}
+
+@keyframes heartbeat{
+  0%{transform:scale(1);}
+  25%{transform:scale(1.15);}
+  40%{transform:scale(1);}
+  60%{transform:scale(1.18);}
+  100%{transform:scale(1);}
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(360deg);
+    opacity:0;
+  }
+}
+
+@keyframes cinematic{
+  0%{opacity:0;transform:scale(0.9);}
+  100%{opacity:1;transform:scale(1);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="card" id="screen1">
+<!-- Music -->
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Screen 1 -->
+<div class="card" id="s1">
+  <div class="teddy heartbeat">🧸❤️🧸</div>
   <h1>Hi Tanisha 💖</h1>
   <p>How are you feeling right now?</p>
-  <button onclick="feeling('happy')">Happy 😊</button>
-  <button onclick="feeling('love')">In Love 💕</button>
-  <div class="comment" id="comment1"></div>
+  <button onclick="startLove('happy')">Happy 😊</button>
+  <button onclick="startLove('love')">In Love 💕</button>
+  <div class="comment" id="c1"></div>
 </div>
 
-<div class="card hidden" id="screen2">
-  <h1>Tell me something 🥺</h1>
+<!-- Screen 2 -->
+<div class="card hidden" id="s2">
+  <div class="teddy heartbeat">🧸🌹🧸</div>
+  <h1>Tell me honestly 🥺</h1>
   <p>How much do you miss me?</p>
-  <input type="range" min="1" max="4" value="1" class="slider" id="missSlider" oninput="updateMiss()">
-  <p id="missValue">1</p>
-  <button onclick="checkMiss()">Confirm ❤️</button>
-  <div class="comment" id="comment2"></div>
+  <input type="range" min="1" max="4" value="1" oninput="updateMiss()">
+  <p id="missVal">1</p>
+  <button onclick="confirmMiss()">Confirm ❤️</button>
+  <div class="comment" id="c2"></div>
 </div>
 
-<div class="card hidden" id="screen3">
-  <h1>I love you so much 💞</h1>
+<!-- Screen 3 -->
+<div class="card hidden" id="s3">
+  <div class="teddy heartbeat">🧸💍🧸</div>
+  <h1>One last thing 💞</h1>
   <p>Will you be my Valentine?</p>
-  <button onclick="nope()">NO 🙈</button>
-  <button onclick="yes()">YES 💖</button>
-  <div class="comment" id="comment3"></div>
+  <button onclick="notAllowed()">NO 🙈</button>
+  <button onclick="finalYes()">YES 💖</button>
+  <div class="comment" id="c3"></div>
 </div>
 
 <script>
-function transition(from,to){
-  document.getElementById(from).classList.add('hidden');
-  document.getElementById(to).classList.remove('hidden');
+/* Music */
+function playMusic(){
+  const m=document.getElementById("music");
+  m.volume=0.4;
+  m.play();
 }
 
-function feeling(type){
-  let msg = document.getElementById("comment1");
-  if(type==="happy"){
-    msg.innerText="Your happiness makes my heart smile ❤️";
-  }else{
-    msg.innerText="Being in love looks beautiful on you 💕";
+/* Vibration (mobile supported) */
+function vibrate(){
+  if(navigator.vibrate){
+    navigator.vibrate([120,80,120]);
   }
-  setTimeout(()=>transition("screen1","screen2"),1500);
 }
 
+/* Transition */
+function go(from,to){
+  document.getElementById(from).classList.add("hidden");
+  document.getElementById(to).classList.remove("hidden");
+}
+
+/* Screen 1 */
+function startLove(type){
+  playMusic(); vibrate();
+  const msg=document.getElementById("c1");
+  msg.innerText = type==="happy"
+    ? "Your happiness makes my heart beat faster 💓"
+    : "Being in love with you feels like home 🫶";
+  setTimeout(()=>go("s1","s2"),1600);
+}
+
+/* Slider */
 function updateMiss(){
   const values=["1","10","100","∞"];
-  let slider=document.getElementById("missSlider").value;
-  document.getElementById("missValue").innerText=values[slider-1];
+  const v=document.querySelector('input[type=range]').value;
+  document.getElementById("missVal").innerText=values[v-1];
 }
 
-function checkMiss(){
-  let slider=document.getElementById("missSlider").value;
-  let msg=document.getElementById("comment2");
-  if(slider<4){
-    msg.innerText="I’m sad 😔 Try again… I know it’s more ❤️";
+/* Miss logic */
+function confirmMiss(){
+  vibrate();
+  const v=document.querySelector('input[type=range]').value;
+  const msg=document.getElementById("c2");
+  if(v<4){
+    msg.innerText="I’m sad 😔 Try again… my heart knows it’s more ❤️";
   }else{
-    msg.innerText="That’s infinity 😍 Just like my love!";
-    setTimeout(()=>transition("screen2","screen3"),1500);
+    msg.innerText="Infinity 😍 Just like my love for you!";
+    setTimeout(()=>go("s2","s3"),1600);
   }
 }
 
-function nope(){
-  document.getElementById("comment3").innerText="This option is not allowed 😌💕";
+/* NO */
+function notAllowed(){
+  vibrate();
+  document.getElementById("c3").innerText="This option is not allowed 😌💕";
 }
 
-function yes(){
-  document.getElementById("comment3").innerText="Utsav loves Tanisha too ❤️ Love you forever 💞";
+/* YES */
+function finalYes(){
+  vibrate();
+  document.getElementById("s3").innerHTML = `
+    <div class="teddy final heartbeat">🧸❤️🧸</div>
+    <h1 class="final">Utsav loves Tanisha ❤️</h1>
+    <p class="final">Love you forever and always 💞</p>
+  `;
 }
+
+/* Rose petals */
+setInterval(()=>{
+  const r=document.createElement("div");
+  r.className="rose";
+  r.innerText="🌹";
+  r.style.left=Math.random()*100+"vw";
+  r.style.animationDuration=4+Math.random()*4+"s";
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(),7000);
+},400);
 </script>
 
 </body>
